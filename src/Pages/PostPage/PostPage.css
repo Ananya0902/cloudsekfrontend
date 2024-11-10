@@ -185,6 +185,7 @@ button:focus {
   margin: 0 5px;
   cursor: pointer;
   font-size: 14px;
+  color:black
 }
 
 .pagination button:hover {

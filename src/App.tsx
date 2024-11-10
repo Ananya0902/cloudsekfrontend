@@ -29,14 +29,14 @@ const App: React.FC = () => {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/otp-page" element={<Otp />} />
 
-            {/* <Route path="/post-creation" element={<PostCreation username={username} />} />
+            <Route path="/post-creation" element={<PostCreation username={username} />} />
           <Route path="/post-page" element={<PostPage />} />
           <Route path="/newpassword" element={<NewPasswordPage />} />
-          <Route path="/myposts" element={<MyPosts />} /> */}
+          <Route path="/myposts" element={<MyPosts />} />
 
             {/* Protected Routes */}
             
-            <Route
+            {/* <Route
               path="/post-creation"
               element={<ProtectedRoute element={<PostCreation username={username} />} path="/post-creation" />}
             />
@@ -51,7 +51,7 @@ const App: React.FC = () => {
             <Route
               path="/myposts"
               element={<ProtectedRoute element={<MyPosts />} path="/myposts" />}
-            />
+            /> */}
           </Routes>
         </div>
       </Router>
