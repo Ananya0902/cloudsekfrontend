@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
-import { MentionsInput, Mention } from 'react-mentions';
 import 'react-quill/dist/quill.snow.css';
 import './PostPage.css';
-
 
 interface Comment {
   id: string;
@@ -41,7 +39,28 @@ const PostsPage: React.FC = () => {
       author: 'Author2',
       comments: [],
     },
+    {
+      id: 'post3',
+      content: 'Another post to test pagination.',
+      author: 'Author3',
+      comments: [],
+    },
+    {
+      id: 'post4',
+      content: 'Yet another post to test pagination.',
+      author: 'Author4',
+      comments: [],
+    },
+    // Add more posts as needed for testing
   ]);
+
+  const postsPerPage = 2; // Number of posts to display per page
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // Calculate the posts to display based on the current page
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   // State to hold the comment text for each post and comment
   const [commentText, setCommentText] = useState<{ [key: string]: string }>({});
@@ -86,7 +105,9 @@ const PostsPage: React.FC = () => {
         <div>
           <strong>{comment.author}</strong>:{' '}
           <span dangerouslySetInnerHTML={{ __html: comment.text }} />
-          <button onClick={() => setReplyTo((prev) => ({ ...prev, [postId]: comment.id }))}>
+          <button
+            onClick={() => setReplyTo((prev) => ({ ...prev, [postId]: comment.id }))}
+          >
             Reply
           </button>
         </div>
@@ -94,10 +115,13 @@ const PostsPage: React.FC = () => {
       </div>
     ));
 
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <div>
       <h2>Posts</h2>
-      {posts.map((post) => (
+      {currentPosts.map((post) => (
         <div key={post.id} style={{ border: '1px solid #ccc', padding: '10px', margin: '20px 0' }}>
           <h3>{post.author}</h3>
           <p>{post.content}</p>
@@ -107,19 +131,16 @@ const PostsPage: React.FC = () => {
 
             <ReactQuill
               value={commentText[post.id] || ''}
-              onChange={(value) =>
-                setCommentText((prev) => ({ ...prev, [post.id]: value }))
-              }
+              onChange={(value) => setCommentText((prev) => ({ ...prev, [post.id]: value }))}
               placeholder="Write a comment..."
               modules={{
                 toolbar: [
                   [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
                   [{size: []}],
                   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                  [{'list': 'ordered'}, {'list': 'bullet'}, 
-                   {'indent': '-1'}, {'indent': '+1'}],
+                  [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
                   ['link', 'image', 'video'],
-                  ['clean']                                         
+                  ['clean'],
                 ],
               }}
               style={{ marginTop: '10px' }}
@@ -134,6 +155,19 @@ const PostsPage: React.FC = () => {
           </div>
         </div>
       ))}
+
+      {/* Pagination controls */}
+      <div className="pagination">
+        {Array.from({ length: Math.ceil(posts.length / postsPerPage) }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => paginate(index + 1)}
+            className={index + 1 === currentPage ? 'active' : ''}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

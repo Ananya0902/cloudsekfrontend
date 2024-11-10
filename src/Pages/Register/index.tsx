@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,30 +8,42 @@ import './Register.css';
 interface RegisterFormData {
   username: string;
   email: string;
-  phone: string;
   password: string;
 }
 
+// Simulated API call to check if the username is unique
+const checkUsernameUnique = async (username: string) => {
+  const existingUsernames = ['existingUser1', 'existingUser2']; // Replace with an API call in real scenario
+  return !existingUsernames.includes(username);
+};
+
 const schema = yup.object().shape({
-  username: yup.string().required('Username is required'),
-  email: yup.string().email('Invalid email format').required('Email is required'),
-  phone: yup
+  username: yup
     .string()
-    .matches(/^\d{10}$/, 'Phone number must be 10 digits')
-    .required('Phone number is required'),
+    .matches(/^[^@]+$/, 'Username should not contain "@"')
+    .required('Username is required'),
+  email: yup.string().email('Invalid email format').required('Email is required'),
   password: yup
     .string()
-    .min(6, 'Password must be at least 6 characters')
+    .min(8, 'Password must be at least 8 characters')
     .required('Password is required'),
 });
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const [usernameError, setUsernameError] = useState<string | null>(null);
+
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: RegisterFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
+    const isUnique = await checkUsernameUnique(data.username);
+    if (!isUnique) {
+      setUsernameError('Username is already taken');
+      return;
+    }
+    setUsernameError(null);
     console.log('User registered successfully:', data);
     navigate('/login');
   };
@@ -49,6 +61,7 @@ const Register: React.FC = () => {
             className="register-input"
           />
           {errors.username && <span className="error-text">{errors.username.message}</span>}
+          {usernameError && <span className="error-text">{usernameError}</span>}
 
           <label htmlFor="email">Email</label>
           <input
@@ -58,15 +71,6 @@ const Register: React.FC = () => {
             className="register-input"
           />
           {errors.email && <span className="error-text">{errors.email.message}</span>}
-
-          <label htmlFor="phone">Phone Number</label>
-          <input
-            type="text"
-            id="phone"
-            {...register('phone')}
-            className="register-input"
-          />
-          {errors.phone && <span className="error-text">{errors.phone.message}</span>}
 
           <label htmlFor="password">Password</label>
           <input
