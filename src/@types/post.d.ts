@@ -9,4 +9,5 @@ export default interface IPost {
     updatedAt?: string;
     comments?: IComment[];
     mentions: string[];
+    edited?: boolean;
 }
