@@ -5,3 +5,10 @@ export default interface IComment {
     mentions: string;
     id?: string;
 }
+
+export interface IAddComment {
+    postId: string;
+    content: string;
+    authroId: string;
+    parentCommentId?: string;
+}

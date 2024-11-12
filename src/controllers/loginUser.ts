@@ -1,11 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import IUser from "../@types/user";
-
-// interface UserInfo {
-//     id: number;
-//     name: string;
-//     email: string;
-// }
+import { _post } from './apiClient';
+import IUser from '../@types/user';
 
 interface LoginResponse {
     token: string;
@@ -19,17 +13,15 @@ interface LoginRequest {
 
 const loginUser = async (credentials: LoginRequest): Promise<LoginResponse | null> => {
     try {
-        const response: AxiosResponse<LoginResponse> = await axios.post(
-            process.env.REACT_APP_LOGIN as string,
-            credentials
-        );
+        const response = await _post<LoginResponse>(process.env.REACT_APP_LOGIN as string, credentials);
         return response.data;
     } catch (error) {
         console.error("Error logging in:", error);
         return null;
     }
-}
+};
 
+// Example usage
 const credentials: LoginRequest = {
     username: "exampleUser",
     password: "examplePassword"

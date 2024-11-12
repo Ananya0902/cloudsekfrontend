@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import { _post } from './apiClient';
 
 interface RegisterResponse {
     message: string;
@@ -17,15 +17,12 @@ interface RegisterRequest {
 
 const registerUser = async (userData: RegisterRequest): Promise<RegisterResponse | null> => {
     try {
-        const response: AxiosResponse<RegisterResponse> = await axios.post(
-            process.env.REACT_APP_REGISTER as string,
-            userData
-        );
+        const response = await _post<RegisterResponse>(process.env.REACT_APP_REGISTER as string, userData);
         return response.data;
     } catch (error) {
         console.error("Error registering user:", error);
         return null;
     }
-}
+};
 
 export { registerUser };
