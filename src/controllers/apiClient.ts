@@ -5,7 +5,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://api.example.com';
 const token = process.env.REACT_APP_BEARER_TOKEN as string;
 
 const apiClient = axios.create({
-    withCredentials: false,
+    withCredentials: true,
     baseURL: BASE_URL,
     headers: {
         'Content-Type': 'application/json',

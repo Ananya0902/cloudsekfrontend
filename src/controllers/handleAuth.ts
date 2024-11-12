@@ -1,5 +1,5 @@
 import { _post } from "./apiClient";
-import IUser, { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../@types/user";
+import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../@types/user";
 
 const loginUser = async (credentials: LoginRequest): Promise<LoginResponse | null> => {
     try {

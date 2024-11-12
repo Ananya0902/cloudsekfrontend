@@ -11,18 +11,22 @@ import NewPasswordPage from "./Pages/NewPasswordPage";
 import MyPosts from "./Pages/MyPosts";
 // import { AuthProvider } from "./AuthContext"; // Import AuthProvider
 import { AuthProvider } from "./contexts/authContext";
-import ProtectedRoute from "./ProtectedRoute"; // Import ProtectedRoute
-import { userInfoPromise } from "./controllers/fetchUser";
+// import ProtectedRoute from "./ProtectedRoute"; // Import ProtectedRoute
+// import { userInfoPromise } from "./controllers/fetchUser";
+// import { useAuth } from "./contexts/authContext";
 import { AccessTokenProvider } from "./contexts/tokenContext";
 import "./App.css";
 
 const App: React.FC = () => {
   const [username, setUsername] = useState("User123"); // Example username state
-  userInfoPromise
-    .then((val) =>
-      val != null ? setUsername(val.username) : setUsername("Mudit Rai")
-    )
-    .catch((err) => console.log(err));
+  // userInfoPromise
+  //   .then((val) =>
+  //     val != null ? setUsername(val.username) : setUsername("Mudit Rai")
+  //   )
+  //   .catch((err) => console.log(err));
+
+  // const { user } = useAuth();
+  // user && setUsername(user?.username);
 
   return (
     <AccessTokenProvider>

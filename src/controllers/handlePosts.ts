@@ -22,7 +22,7 @@ const deletePost = async (postId: string): Promise<void> => {
 
 const createPost = async (postBody: ICreatePost): Promise<IPost | null> => {
     try {
-        const response = await _post<IPost>("/posts")
+        const response = await _post<IPost>("/posts", postBody)
         return response.data
     } catch (error) {
         console.log("Error creating Post: ", error)

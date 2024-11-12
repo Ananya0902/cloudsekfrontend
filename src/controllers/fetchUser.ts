@@ -7,7 +7,7 @@ import IUser from "../@types/user";
 //     email: string;
 // }
 
-console.log(process.env)
+// console.log(process.env)
 
 const fetchUserInfo = async (): Promise<IUser | null> => {
     try {
@@ -19,7 +19,7 @@ const fetchUserInfo = async (): Promise<IUser | null> => {
     }
 }
 
-console.log(process.env.REACT_APP_USER);
+// console.log(process.env.REACT_APP_USER);
 
 const userInfoPromise = fetchUserInfo();
 userInfoPromise.then(data => {
