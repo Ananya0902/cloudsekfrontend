@@ -14,7 +14,7 @@ const loginUser = async (credentials: LoginRequest): Promise<{ user: IUser | nul
 
 const registerUser = async (userData: RegisterRequest): Promise<RegisterResponse | null> => {
     try {
-        const response = await _post<RegisterResponse>(process.env.REACT_APP_REGISTER as string, userData);
+        const response = await _post<RegisterResponse>("/auth/register", userData);
         return response.data;
     } catch (error) {
         console.error("Error registering user:", error);

@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css"; // Import Quill's snow theme CSS
 import "./MyPosts.css";
 import IPost from "../../@types/post";
 import { getAllPosts } from "../../controllers/handlePosts";
+import { useAuth } from "../../contexts/authContext";
 
 // interface Post {
 //   id: number;
@@ -84,11 +85,16 @@ const MyPosts: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 3; // Display 3 posts per page
 
+  const userData = useAuth();
+  const currentUsername = userData.user?.username;
+
   useEffect(() => {
     const fetchPosts = async () => {
       const fetchedPosts = await getAllPosts();
       if (fetchedPosts) {
-        setPosts(fetchedPosts);
+        setPosts(
+          fetchedPosts.filter((post) => post.authorId === currentUsername)
+        );
       }
     };
 

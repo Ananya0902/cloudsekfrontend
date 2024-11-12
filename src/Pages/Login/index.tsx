@@ -3,17 +3,17 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../controllers/loginUser";
+import { loginUser } from "../../controllers/handleAuth";
 import "./Login.css";
 import { useAuth } from "../../contexts/authContext";
 
 interface LoginFormData {
-  username: string;
+  email: string;
   password: string;
 }
 
 const schema = yup.object().shape({
-  username: yup.string().required("Username is required"),
+  email: yup.string().required("Email is required"),
   password: yup.string().required("Password is required"),
 });
 
@@ -40,6 +40,7 @@ const Login: React.FC = () => {
     if (response) {
       console.log("Login successful:", response);
       setUser(response.user);
+      console.log(response.user);
       navigate("/post-creation");
     } else {
       console.error("Login failed.");
@@ -51,15 +52,15 @@ const Login: React.FC = () => {
       <div className="login-content">
         <h2 className="login-title">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="login-form">
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">Email</label>
           <input
             type="text"
-            id="username"
-            {...register("username")}
+            id="email"
+            {...register("email")}
             className="login-input"
           />
-          {errors.username && (
-            <span className="error-text">{errors.username.message}</span>
+          {errors.email && (
+            <span className="error-text">{errors.email.message}</span>
           )}
 
           <label htmlFor="password">Password</label>

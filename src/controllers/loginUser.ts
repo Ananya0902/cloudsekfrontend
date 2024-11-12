@@ -13,10 +13,10 @@ interface LoginRequest {
 
 const loginUser = async (credentials: LoginRequest): Promise<LoginResponse | null> => {
     try {
-        const response = await _post<LoginResponse>(process.env.REACT_APP_LOGIN as string, credentials);
+        const response = await _post<LoginResponse>("/auth/login", credentials);
         return response.data;
     } catch (error) {
-        console.error("Error logging in:", error);
+        console.error("Error logging in: ", error);
         return null;
     }
 };

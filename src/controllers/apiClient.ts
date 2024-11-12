@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://api.example.com';
+console.log("token", process.env.REACT_APP_BEARER_TOKEN)
 const token = process.env.REACT_APP_BEARER_TOKEN as string;
 
 const apiClient = axios.create({
