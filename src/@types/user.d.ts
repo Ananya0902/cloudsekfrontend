@@ -1,6 +1,33 @@
+import IPost from "./post";
+
 export default interface IUser {
     username: string;
     id?: string;
     email: string;
     passsword?: string;
+    isVerified: boolean;
+    posts: IPost[];
 }
+
+interface LoginResponse {
+    token: string;
+    user: IUser;
+}
+
+interface LoginRequest {
+    username: string;
+    password: string;
+}
+
+interface RegisterResponse {
+    token: string;
+    user: IUser;
+}
+
+interface RegisterRequest {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse }

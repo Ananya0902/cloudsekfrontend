@@ -11,3 +11,16 @@ export default interface IPost {
     mentions: string[];
     edited?: boolean;
 }
+
+export interface ICreatePost {
+    title: string;
+    content: string;
+    username: string;
+}
+
+export interface IUpdatePost {
+    title?: string;
+    content?: string;
+    mentions?: string[];
+}
+

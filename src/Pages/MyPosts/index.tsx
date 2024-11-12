@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import Quill's snow theme CSS
 import "./MyPosts.css";
 import IPost from "../../@types/post";
-import { getPosts } from "../../controllers/getPost";
+import { getAllPosts } from "../../controllers/handlePosts";
 
 // interface Post {
 //   id: number;
@@ -86,7 +86,7 @@ const MyPosts: React.FC = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const fetchedPosts = await getPosts();
+      const fetchedPosts = await getAllPosts();
       if (fetchedPosts) {
         setPosts(fetchedPosts);
       }
