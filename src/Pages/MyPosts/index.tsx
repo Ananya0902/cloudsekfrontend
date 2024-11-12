@@ -1,63 +1,131 @@
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import Quill's snow theme CSS
-import './MyPosts.css';
+import React, { useState, useEffect } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import Quill's snow theme CSS
+import "./MyPosts.css";
+import IPost from "../../@types/post";
+import { getAllPosts } from "../../controllers/handlePosts";
 
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  edited: boolean;  // New property to track if post is edited
-}
+// interface Post {
+//   id: number;
+//   title: string;
+//   content: string;
+//   edited: boolean;  // New property to track if post is edited
+// }
 
 const MyPosts: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([
-    { id: 1, title: 'My First Post', content: 'This is the content of my first post.', edited: false },
-    { id: 2, title: 'My Second Post', content: 'This is the content of my second post.', edited: false },
-    { id: 3, title: 'My Third Post', content: 'This is the content of my third post.', edited: false },
-    { id: 4, title: 'My Fourth Post', content: 'This is the content of my fourth post.', edited: false },
-    { id: 5, title: 'My Fifth Post', content: 'This is the content of my fifth post.', edited: false },
-    { id: 6, title: 'My Sixth Post', content: 'This is the content of my sixth post.', edited: false },
-    { id: 7, title: 'My Seventh Post', content: 'This is the content of my seventh post.', edited: false },
-    { id: 8, title: 'My Eighth Post', content: 'This is the content of my eighth post.', edited: false },
-    { id: 9, title: 'My Ninth Post', content: 'This is the content of my ninth post.', edited: false },
-    { id: 10, title: 'My Tenth Post', content: 'This is the content of my tenth post.', edited: false },
-    // Add more posts here if needed
-  ]);
+  // const [posts, setPosts] = useState<IPost[]>([
+  //   {
+  //     id: 1,
+  //     title: "My First Post",
+  //     content: "This is the content of my first post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "My Second Post",
+  //     content: "This is the content of my second post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "My Third Post",
+  //     content: "This is the content of my third post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "My Fourth Post",
+  //     content: "This is the content of my fourth post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "My Fifth Post",
+  //     content: "This is the content of my fifth post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 6,
+  //     title: "My Sixth Post",
+  //     content: "This is the content of my sixth post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 7,
+  //     title: "My Seventh Post",
+  //     content: "This is the content of my seventh post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 8,
+  //     title: "My Eighth Post",
+  //     content: "This is the content of my eighth post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 9,
+  //     title: "My Ninth Post",
+  //     content: "This is the content of my ninth post.",
+  //     edited: false,
+  //   },
+  //   {
+  //     id: 10,
+  //     title: "My Tenth Post",
+  //     content: "This is the content of my tenth post.",
+  //     edited: false,
+  //   },
+  //   // Add more posts here if needed
+  // ]);
 
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentPost, setCurrentPost] = useState<Post | null>(null);
-  const [editedContent, setEditedContent] = useState('');
+  const [currentPost, setCurrentPost] = useState<IPost | null>(null);
+  const [editedContent, setEditedContent] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 3; // Display 3 posts per page
 
-  const handleEditClick = (post: Post) => {
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const fetchedPosts = await getAllPosts();
+      if (fetchedPosts) {
+        setPosts(fetchedPosts);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const handleEditClick = (post: IPost) => {
     setIsEditing(true);
     setCurrentPost(post);
     setEditedContent(post.content);
   };
 
-  const handleDeleteClick = (postId: number) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this post?');
+  const handleDeleteClick = (postId: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
     if (confirmDelete) {
-      setPosts(posts.filter(post => post.id !== postId));
+      setPosts(posts.filter((post) => post.id !== postId));
     }
   };
 
   const handleSaveChanges = () => {
     if (currentPost) {
-      setPosts(posts.map(post => 
-        post.id === currentPost.id 
-          ? { 
-              ...post, 
-              content: editedContent, // Append "Edited" text
-              edited: true // Mark as edited
-            } 
-          : post
-      ));
+      setPosts(
+        posts.map((post) =>
+          post.id === currentPost.id
+            ? {
+                ...post,
+                content: editedContent, // Append "Edited" text
+                edited: true, // Mark as edited
+              }
+            : post
+        )
+      );
       setIsEditing(false);
       setCurrentPost(null);
-      setEditedContent('');
+      setEditedContent("");
     }
   };
 
@@ -79,11 +147,15 @@ const MyPosts: React.FC = () => {
         {currentPosts.length === 0 ? (
           <p className="empty-message">You have no posts yet.</p>
         ) : (
-          currentPosts.map(post => (
+          currentPosts.map((post) => (
             <div key={post.id} className="post-card">
               <strong>{post.title}</strong>
-              <div dangerouslySetInnerHTML={{ __html: post.content }}></div> {/* Render rich text content */}
-              {post.edited && <span className="edited-tag">[Edited]</span>} {/* Display the "Edited" label */}
+              <div
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              ></div>{" "}
+              {/* Render rich text content */}
+              {post.edited && <span className="edited-tag">[Edited]</span>}{" "}
+              {/* Display the "Edited" label */}
               <div className="post-card-buttons">
                 <button
                   className="edit-button"
@@ -93,7 +165,7 @@ const MyPosts: React.FC = () => {
                 </button>
                 <button
                   className="delete-button"
-                  onClick={() => handleDeleteClick(post.id)}
+                  onClick={() => handleDeleteClick(post.id || "")}
                 >
                   Delete
                 </button>
@@ -112,19 +184,19 @@ const MyPosts: React.FC = () => {
             theme="snow"
             modules={{
               toolbar: [
-                [{ 'header': '1'}, { 'header': '2'}, { 'font': [] }],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['bold', 'italic', 'underline'],
-                [{ 'align': [] }],
-                ['link'],
-                ['image'],
-                ['blockquote'],
-                [{ 'direction': 'rtl' }],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
-                [{ 'size': ['small', false, 'large', 'huge'] }],
-                ['clean'],
+                [{ header: "1" }, { header: "2" }, { font: [] }],
+                [{ list: "ordered" }, { list: "bullet" }],
+                ["bold", "italic", "underline"],
+                [{ align: [] }],
+                ["link"],
+                ["image"],
+                ["blockquote"],
+                [{ direction: "rtl" }],
+                [{ color: [] }, { background: [] }],
+                [{ script: "sub" }, { script: "super" }],
+                [{ indent: "-1" }, { indent: "+1" }],
+                [{ size: ["small", false, "large", "huge"] }],
+                ["clean"],
               ],
             }}
           />
@@ -132,7 +204,10 @@ const MyPosts: React.FC = () => {
             <button onClick={handleSaveChanges} className="save-button">
               Save Changes
             </button>
-            <button onClick={() => setIsEditing(false)} className="cancel-button">
+            <button
+              onClick={() => setIsEditing(false)}
+              className="cancel-button"
+            >
               Cancel
             </button>
           </div>
