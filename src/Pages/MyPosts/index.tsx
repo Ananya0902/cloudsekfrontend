@@ -3,7 +3,11 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import Quill's snow theme CSS
 import "./MyPosts.css";
 import IPost from "../../@types/post";
-import { getAllPosts } from "../../controllers/handlePosts";
+import {
+  deletePost,
+  getAllPosts,
+  updatePost,
+} from "../../controllers/handlePosts";
 import { useAuth } from "../../contexts/authContext";
 
 // interface Post {
@@ -105,6 +109,11 @@ const MyPosts: React.FC = () => {
     setIsEditing(true);
     setCurrentPost(post);
     setEditedContent(post.content);
+    updatePost(post.id ? post.id : "", {
+      title: post.content.substring(0, 10),
+      content: editedContent,
+      mentions: post.mentions,
+    });
   };
 
   const handleDeleteClick = (postId: string) => {
@@ -113,6 +122,7 @@ const MyPosts: React.FC = () => {
     );
     if (confirmDelete) {
       setPosts(posts.filter((post) => post.id !== postId));
+      deletePost(postId);
     }
   };
 

@@ -13,7 +13,7 @@ import MyPosts from "./Pages/MyPosts";
 import { AuthProvider } from "./contexts/authContext";
 import ProtectedRoute from "./ProtectedRoute"; // Import ProtectedRoute
 import { userInfoPromise } from "./controllers/fetchUser";
-
+import { AccessTokenProvider } from "./contexts/tokenContext";
 import "./App.css";
 
 const App: React.FC = () => {
@@ -25,28 +25,29 @@ const App: React.FC = () => {
     .catch((err) => console.log(err));
 
   return (
-    <AuthProvider>
-      <Router>
-        <div className="app-container">
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/otp-page" element={<Otp />} />
+    <AccessTokenProvider>
+      <AuthProvider>
+        <Router>
+          <div className="app-container">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/otp-page" element={<Otp />} />
 
-            <Route
-              path="/post-creation"
-              element={<PostCreation username={username} />}
-            />
-            <Route path="/post-page" element={<PostPage />} />
-            <Route path="/newpassword" element={<NewPasswordPage />} />
-            <Route path="/myposts" element={<MyPosts />} />
+              <Route
+                path="/post-creation"
+                element={<PostCreation username={username} />}
+              />
+              <Route path="/post-page" element={<PostPage />} />
+              <Route path="/newpassword" element={<NewPasswordPage />} />
+              <Route path="/myposts" element={<MyPosts />} />
 
-            {/* Protected Routes */}
+              {/* Protected Routes */}
 
-            {/* <Route
+              {/* <Route
               path="/post-creation"
               element={<ProtectedRoute element={<PostCreation username={username} />} path="/post-creation" />}
             />
@@ -62,10 +63,11 @@ const App: React.FC = () => {
               path="/myposts"
               element={<ProtectedRoute element={<MyPosts />} path="/myposts" />}
             /> */}
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
+    </AccessTokenProvider>
   );
 };
 

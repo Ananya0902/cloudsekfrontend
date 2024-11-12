@@ -1,14 +1,16 @@
 import { _post } from "./apiClient";
 import IUser, { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from "../@types/user";
 
-const loginUser = async (credentials: LoginRequest): Promise<{ user: IUser | null; token: LoginResponse | null }> => {
+const loginUser = async (credentials: LoginRequest): Promise<LoginResponse | null> => {
     try {
-        const response = await _post<{ user: IUser | null; token: LoginResponse | null }>("/auth/login", credentials);
-        const { user, token } = response.data
-        return { user, token }
+        console.log(credentials)
+        const response = await _post<LoginResponse>("/auth/login", credentials);
+        // console.log(response.data, response.headers)
+        const { user, accessToken } = response.data
+        return { user, accessToken }
     } catch (error) {
         console.error("Error logging in:", error);
-        return { user: null, token: null };
+        return null;
     }
 };
 

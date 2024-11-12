@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../controllers/handleAuth";
 import "./Login.css";
 import { useAuth } from "../../contexts/authContext";
+import { useAccessToken } from "../../contexts/tokenContext";
+import { setAuthToken } from "../../controllers/apiClient";
 
 interface LoginFormData {
   email: string;
@@ -28,6 +30,7 @@ const Login: React.FC = () => {
   });
 
   const { setUser } = useAuth();
+  const { setAccessToken } = useAccessToken();
   // const onSubmit = (data: LoginFormData) => {
   //   console.log("User logged in:", data);
   //   navigate("/post-creation"); // Redirect to home page after login
@@ -40,6 +43,10 @@ const Login: React.FC = () => {
     if (response) {
       console.log("Login successful:", response);
       setUser(response.user);
+      setAccessToken(response.accessToken);
+
+      setAuthToken(response.accessToken);
+
       console.log(response.user);
       navigate("/post-creation");
     } else {

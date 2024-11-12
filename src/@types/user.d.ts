@@ -10,7 +10,7 @@ export default interface IUser {
 }
 
 interface LoginResponse {
-    token: string;
+    accessToken: string;
     user: IUser;
 }
 
