@@ -3,8 +3,12 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { io } from "socket.io-client";
 import IPost from "../../@types/post";
-import IComment from "../../@types/comment";
-
+import IComment, { IAddComment } from "../../@types/comment";
+import {
+  addComment as addNewComment,
+  // deleteComment,
+  // getComments,
+} from "../../controllers/handleComments";
 import "./PostPage.css";
 import { getAllPosts } from "../../controllers/handlePosts";
 import { useAuth } from "../../contexts/authContext";
@@ -91,6 +95,18 @@ const PostsPage: React.FC = () => {
       mentions: [],
     };
 
+    const new_comment: IAddComment = {
+      postId: postId,
+      content: text,
+      authorId:
+        userData.user?.username ||
+        sessionStorage.getItem("username") ||
+        "Dummy User",
+      parentCommentId: parentId,
+    };
+
+    const new_comm = addNewComment(new_comment);
+
     setPosts((prev) =>
       prev.map((post) =>
         post.id === postId
@@ -102,11 +118,14 @@ const PostsPage: React.FC = () => {
                     comment.id === parentId
                       ? {
                           ...comment,
-                          replies: [...(comment.replies || []), newComment],
+                          replies: [
+                            ...(comment.replies || []),
+                            new_comm || newComment,
+                          ],
                         }
                       : comment
                   )
-                : post.comments && [...post.comments, newComment],
+                : post.comments && [...post.comments, new_comm || newComment],
             }
           : post
       )

@@ -19,17 +19,15 @@ const PostCreation: React.FC<PostCreationProps> = ({ username }) => {
   const getData = useAuth();
   if (getData) {
     const un = getData.user?.username;
-    console.log(un);
-    if (un) {
-      username = un;
-    }
+    // console.log(un);
+    username = un || sessionStorage.getItem("username") || "Dummy User";
   }
 
   const handleChange = (value: string) => {
     setPostContent(value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log("Post content:", postContent);
     // Add post submission logic here
     const newPost: ICreatePost = {
@@ -37,10 +35,10 @@ const PostCreation: React.FC<PostCreationProps> = ({ username }) => {
       content: postContent,
       username: getData.user?.username
         ? getData.user?.username
-        : "undefined user",
+        : sessionStorage.getItem("username") || "",
     };
     // const newPost = createPost()
-    const createdPost = createPost(newPost);
+    const createdPost = await createPost(newPost);
     console.log("New Post Created: ", createdPost);
   };
 

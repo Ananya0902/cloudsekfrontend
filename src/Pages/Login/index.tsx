@@ -44,6 +44,8 @@ const Login: React.FC = () => {
       console.log("Login successful:", response);
       setUser(response.user);
       setAccessToken(response.accessToken);
+      sessionStorage.setItem("username", response.user.username);
+      sessionStorage.setItem("accessToken", response.accessToken);
 
       setAuthToken(response.accessToken);
 

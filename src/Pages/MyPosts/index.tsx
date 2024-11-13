@@ -90,7 +90,9 @@ const MyPosts: React.FC = () => {
   const postsPerPage = 3; // Display 3 posts per page
 
   const userData = useAuth();
-  const currentUsername = userData.user?.username;
+  const currentUsername = userData.user?.username
+    ? userData.user?.username
+    : sessionStorage.getItem("username");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -103,7 +105,7 @@ const MyPosts: React.FC = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [currentUsername]);
 
   const handleEditClick = (post: IPost) => {
     setIsEditing(true);
@@ -116,13 +118,15 @@ const MyPosts: React.FC = () => {
     });
   };
 
-  const handleDeleteClick = (postId: string) => {
+  const handleDeleteClick = async (postId: string) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this post?"
     );
     if (confirmDelete) {
       setPosts(posts.filter((post) => post.id !== postId));
-      deletePost(postId);
+      console.log("deleting");
+      await deletePost(postId);
+      console.log("deleted");
     }
   };
 

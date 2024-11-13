@@ -11,7 +11,7 @@ import NewPasswordPage from "./Pages/NewPasswordPage";
 import MyPosts from "./Pages/MyPosts";
 // import { AuthProvider } from "./AuthContext"; // Import AuthProvider
 import { AuthProvider } from "./contexts/authContext";
-// import ProtectedRoute from "./ProtectedRoute"; // Import ProtectedRoute
+import ProtectedRoute from "./ProtectedRoute"; // Import ProtectedRoute
 // import { userInfoPromise } from "./controllers/fetchUser";
 // import { useAuth } from "./contexts/authContext";
 import { AccessTokenProvider } from "./contexts/tokenContext";
@@ -27,6 +27,7 @@ const App: React.FC = () => {
 
   // const { user } = useAuth();
   // user && setUsername(user?.username);
+  !username && setUsername("Test User");
 
   return (
     <AccessTokenProvider>
@@ -41,32 +42,46 @@ const App: React.FC = () => {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/otp-page" element={<Otp />} />
 
-              <Route
+              {/* <Route
                 path="/post-creation"
                 element={<PostCreation username={username} />}
               />
               <Route path="/post-page" element={<PostPage />} />
               <Route path="/newpassword" element={<NewPasswordPage />} />
-              <Route path="/myposts" element={<MyPosts />} />
+              <Route path="/myposts" element={<MyPosts />} /> */}
 
               {/* Protected Routes */}
 
-              {/* <Route
-              path="/post-creation"
-              element={<ProtectedRoute element={<PostCreation username={username} />} path="/post-creation" />}
-            />
-            <Route
-              path="/post-page"
-              element={<ProtectedRoute element={<PostPage />} path="/post-page" />}
-            />
-            <Route
-              path="/newpassword"
-              element={<ProtectedRoute element={<NewPasswordPage />} path="/newpassword" />}
-            />
-            <Route
-              path="/myposts"
-              element={<ProtectedRoute element={<MyPosts />} path="/myposts" />}
-            /> */}
+              <Route
+                path="/post-creation"
+                element={
+                  <ProtectedRoute
+                    element={<PostCreation username={username} />}
+                    path="/post-creation"
+                  />
+                }
+              />
+              <Route
+                path="/post-page"
+                element={
+                  <ProtectedRoute element={<PostPage />} path="/post-page" />
+                }
+              />
+              <Route
+                path="/newpassword"
+                element={
+                  <ProtectedRoute
+                    element={<NewPasswordPage />}
+                    path="/newpassword"
+                  />
+                }
+              />
+              <Route
+                path="/myposts"
+                element={
+                  <ProtectedRoute element={<MyPosts />} path="/myposts" />
+                }
+              />
             </Routes>
           </div>
         </Router>

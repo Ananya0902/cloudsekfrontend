@@ -1,20 +1,23 @@
-import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import React from "react";
+import { Navigate } from "react-router-dom";
+// import { useAuth } from "./AuthContext";
+import { useAuth } from "./contexts/authContext";
 
 interface ProtectedRouteProps {
   element: React.ReactElement;
-  path: string;  // You can pass the path here manually
+  path: string; // You can pass the path here manually
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element, path }) => {
   const { user } = useAuth();
 
   if (!user) {
-    return <Navigate to="/login" />;
+    const token = sessionStorage.getItem("accessToken");
+    console.log(token);
+    if (!token) return <Navigate to="/login" />;
   }
 
-  return <Route path={path} element={element} />;
+  return element;
 };
 
 export default ProtectedRoute;

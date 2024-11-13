@@ -10,6 +10,6 @@ export default interface IComment {
 export interface IAddComment {
     postId: string;
     content: string;
-    authroId: string;
+    authorId: string;
     parentCommentId?: string;
 }
